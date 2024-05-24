@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import BackButton from "../components/BackButton";
 const CreateBook = () => {
   return (
     <>
-      <div>CreatBook</div>
-      <Link to="/">Back Home</Link>
+      <div className="flex items-center m-4">
+        <BackButton destination="/books" />
+        <h1 className="text-2xl my-5 mx-5">Creat Book</h1>
+      </div>
     </>
   );
 };

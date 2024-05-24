@@ -1,17 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import BackButton from "../components/BackButton.jsx";
 
 const Home = () => {
   return (
     <>
-      <h1>Home</h1>
+      <h1 className="text-6xl my-5">Home</h1>
 
-      <ul>
-        <li>
-          <Link to="/books">All books</Link>
+      <ul className="flex justify-center items-center">
+        <li className="border border-black rounded-md mx-2">
+          <Link to="/books" className="text-1xl my-8 mx-8">
+            Books
+          </Link>
         </li>
-        <li>
-          <Link to="/books/create">Add new books</Link>
+        <li className="border border-black rounded-md mx-2">
+          <Link to="/books/create" className="text-1xl my-8 mx-8">
+            Add New Book
+          </Link>
         </li>
       </ul>
     </>
