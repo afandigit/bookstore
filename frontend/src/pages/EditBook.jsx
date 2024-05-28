@@ -1,87 +1,109 @@
 import React from "react";
 import BackButton from "../components/BackButton";
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import axios from "axios";
 import Spinner from "../components/Spinner";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
-const editBook = () => {
-  const [book, setBook] = useState({});
+const EditBook = () => {
+  const [name, setName] = useState("");
+  const [author, setAuthor] = useState("");
+  const [publishYear, setPublishYear] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const { id } = useParams();
   useEffect(() => {
     setLoading(true);
-    axios(`http://localhost:7777/books/${id}`)
+    axios
+      .get(`http://localhost:7777/books/${id}`)
       .then((response) => {
-        setBook(response.data.data);
         setLoading(false);
+        setName(response.data.data.name);
+        setAuthor(response.data.data.author);
+        setPublishYear(response.data.data.publishYear);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         setLoading(false);
+        alert("Error: Check Your Console ...");
+        console.log(error);
       });
   }, []);
+
+  const handleEditBook = () => {
+    const data = {
+      name,
+      author,
+      publishYear,
+    };
+
+    setLoading(true);
+    axios
+      .put(`http://localhost:7777/books/${id}`, data)
+      .then(() => {
+        setLoading(false);
+        navigate("/books");
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert("Error: Check Your Console ...");
+        console.log(error);
+      });
+  };
+
   return (
     <>
-      <div className="flex justify-between items-center m-4">
-        <div className="flex items-center mr-4">
-          <BackButton destination={`/books/details/${id}`} />
-          <h1 className="text-2xl my-5 mx-5">Edit Book</h1>
-        </div>
+      <div className="flex items-center m-4">
+        <BackButton destination="/books" />
+        <h1 className="text-2xl my-5 mx-5">Edit Book</h1>
       </div>
+
       {loading ? (
         <Spinner />
       ) : (
-        <div className="flex flex-col border-2 border-black-600 mx-2">
-          <div className="flex flex-row my-4 mx-8">
-            <span className="text-2xl mr-4 text-gray-500">Id :</span>
+        <div className="flex flex-col border-2 border-black-500 rounded-xl p-4 w-[600px] mx-auto">
+          <div className="my-2 flex">
+            <label htmlFor="" className="text-2xl mr-4 text-gray-500 w-[200px]">
+              Name
+            </label>
             <input
               type="text"
-              className="ml-8 px-8 border-2 border-black-800 w-full"
-              value={book._id}
-              disabled
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="border-2 border-gray-500 px-4 w-full"
             />
           </div>
-          <div className="flex flex-row my-4 mx-8">
-            <span className="text-2xl mr-4 text-gray-500">Name :</span>
+          <div className="my-2 flex">
+            <label htmlFor="" className="text-2xl mr-4 text-gray-500 w-[200px]">
+              Author
+            </label>
             <input
               type="text"
-              value={book.name}
-              className="ml-8 px-8 border-2 border-black-800 w-full"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              className="border-2 border-gray-500 px-4 w-full"
             />
           </div>
-          <div className="flex flex-row my-4 mx-8">
-            <span className="text-2xl mr-4 text-gray-500">Author :</span>
+          <div className="my-2 flex">
+            <label htmlFor="" className="text-2xl mr-4 text-gray-500 w-[200px]">
+              Publish Year
+            </label>
             <input
               type="text"
-              value={book.author}
-              className="ml-8 px-8 border-2 border-black-800 w-full"
+              value={publishYear}
+              onChange={(e) => setPublishYear(e.target.value)}
+              className="border-2 border-gray-500 px-4 w-full"
             />
           </div>
-          <div className="flex flex-row my-4 mx-8">
-            <span className="text-2xl mr-4 text-gray-500">Publish Year :</span>
-            <input
-              type="text"
-              value={book.publishYear}
-              className="ml-8 px-8 border-2 border-black-800 w-full"
-            />
-          </div>
-          <div className="flex flex-row my-4 mx-8">
-            <span className="text-2xl mr-4 text-gray-500">Created At :</span>
-            <span className="ml-2 px-4 border-2 border-black-800 w-full">
-              {new Date(book.createdAt).toLocaleString()}
-            </span>
-          </div>
-          <div className="flex flex-row my-4 mx-8 select-none">
-            <span className="text-2xl mr-2 text-gray-500">Updated At :</span>
-            <span className="ml-2 px-4 border-2 border-black-800 w-full">
-              {new Date(book.updatedAt).toLocaleString()}
-            </span>
-          </div>
+          <button
+            className="my-2 bg-blue-100 px-8 py-3 mx-auto rounded-xl text-xl text-blue-900"
+            onClick={handleEditBook}
+          >
+            Save
+          </button>
         </div>
       )}
     </>
   );
 };
 
-export default editBook;
+export default EditBook;

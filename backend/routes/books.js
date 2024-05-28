@@ -84,7 +84,6 @@ router.post("/", async (request, response) => {
 
 router.put("/:id", async (request, response) => {
   try {
-
     if (
       !request.body.name ||
       !request.body.author ||
@@ -95,8 +94,8 @@ router.put("/:id", async (request, response) => {
       });
     }
 
-    const {id} = request.params
-    const result = await Book.findByIdAndUpdate(id, request.body)
+    const { id } = request.params;
+    const result = await Book.findByIdAndUpdate(id, request.body);
 
     if (!result) {
       return response.status(400).json({
@@ -106,8 +105,6 @@ router.put("/:id", async (request, response) => {
     return response.status(200).json({
       message: "New Book has been successfully updated:) ...",
     });
-
-
   } catch (error) {
     console.log(error.message);
     return response.status(500).json({
