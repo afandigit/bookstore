@@ -1,21 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
+import SortItemsButton from "../SortItemsButton.jsx";
 
 const BooksTable = ({ books }) => {
+  const [selectedSortItemsButton, setSelectedSortItemsButton] = useState("");
   return (
     <table className="w-full border-separate border-spacing-2">
       <thead>
         <tr>
           <th className="border border-slate-600 rounded-md">No</th>
-          <th className="border border-slate-600 rounded-md">Name</th>
-          <th className="border border-slate-600 rounded-md max-md:hidden">
-            Author
+          <th className="border border-slate-600 rounded-md">
+            <div className="flex justify-around items-center">
+              <span>Name</span>
+              <div onClick={() => setSelectedSortItemsButton("name")}>
+                <SortItemsButton
+                  isActiveButton={selectedSortItemsButton === "name"}
+                />
+              </div>
+            </div>
           </th>
           <th className="border border-slate-600 rounded-md max-md:hidden">
-            Year Of Publish
+            <div className=" flex justify-around items-center">
+              <span>Author</span>
+              <div onClick={() => setSelectedSortItemsButton("author")}>
+                <SortItemsButton
+                  isActiveButton={selectedSortItemsButton === "author"}
+                  onClick={() => {
+                    setSelectedSortItemsButton("author");
+                  }}
+                />
+              </div>
+            </div>
+          </th>
+          <th className="border border-slate-600 rounded-md max-md:hidden">
+            <div className="flex justify-around items-center">
+              <span>Year Of Publish</span>
+              <div
+                onClick={() => setSelectedSortItemsButton("year_of_publish")}
+              >
+                <SortItemsButton
+                  isActiveButton={selectedSortItemsButton === "year_of_publish"}
+                  onClick={() => {
+                    setSelectedSortItemsButton("year_of_publish");
+                  }}
+                />
+              </div>
+            </div>
           </th>
           <th className="border border-slate-600 rounded-md">Operations</th>
         </tr>

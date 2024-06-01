@@ -7,16 +7,27 @@ import BackButton from "../components/BackButton.jsx";
 import BooksTable from "../components/home/BooksTable.jsx";
 import BooksCard from "../components/home/BooksCard.jsx";
 import ToggleDisplayComponents from "../components/home/ToggleDisplayComponents.jsx";
-import SortItemsButton from "../components/SortItemsButton.jsx";
+import FilterItems from "../components/FilterItems.jsx";
 
 const Books = () => {
   const [books, setBooks] = useState([]);
+  const [searchValue, setsearchValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [booksDisplayType, setBooksDisplayType] = useState("table");
 
   const selectedType = (type) => {
     setBooksDisplayType(type);
   };
+
+  const getFiltredItems = (value) => {
+    setsearchValue(value);
+  };
+
+  const filtredBooks = books.filter((item) => {
+    return searchValue.toLowerCase() === ""
+      ? item
+      : item.name.toLowerCase().includes(searchValue);
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -44,7 +55,7 @@ const Books = () => {
               booksDisplayType={booksDisplayType}
             />
           </div>
-          <SortItemsButton itemsName={"books"} />
+          <FilterItems retrieveSearchValue={getFiltredItems} />
           <Link to="/books/create">
             <MdOutlineAddBox className="text-3xl text-blue-800" />
           </Link>
@@ -53,7 +64,7 @@ const Books = () => {
         {loading ? (
           <Spinner />
         ) : booksDisplayType === "table" ? (
-          <BooksTable books={books} />
+          <BooksTable books={filtredBooks} />
         ) : (
           <BooksCard books={books} />
         )}
